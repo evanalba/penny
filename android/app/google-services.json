@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "43128747107",
+    "project_id": "penny-9e673",
+    "storage_bucket": "penny-9e673.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43128747107:android:a07019303dd73aaad43456",
+        "android_client_info": {
+          "package_name": "com.example.penny"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPFkMEaFScQSkFZus__MRklt-LPrwN_GI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
