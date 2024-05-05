@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:penny/pages/camera_page.dart';
 import 'package:penny/pages/collection_page.dart';
+import 'package:penny/pages/leaderboard_page.dart';
+import 'package:penny/pages/profile_page.dart';
+import 'package:penny/pages/search_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,11 +17,11 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const Center(child: Text('Home Screen')),
+    const SearchScreen(),
     const CollectionScreen(),
-    const Center(child: Text('Camera Screen')),
-    const Center(child: Text('Leaderboard Screen')),
-    const Center(child: Text('Profile Screen')),
+    const CameraScreen(),
+    const LeaderboardScreen(),
+    const ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -29,14 +33,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () => FirebaseAuth.instance.signOut(),
-            icon: const Icon(Icons.logout, color: Colors.black),
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   actions: [
+      //     IconButton(
+      //       onPressed: () => FirebaseAuth.instance.signOut(),
+      //       icon: const Icon(Icons.logout, color: Colors.black),
+      //     ),
+      //   ],
+      // ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.black, 
