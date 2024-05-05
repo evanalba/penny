@@ -12,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   google_sign_in: ^6.2.1
+  shared_preferences: ^2.2.3
+  url_launcher: ^6.2.6
 
 dev_dependencies:
   flutter_test:
