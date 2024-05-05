@@ -69,19 +69,19 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 10),
 
-                // Forgot password?
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
+                // Forgot password? FUTURE UPDATE!
+                // const Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 25.0),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.end,
+                //     children: [
+                //       Text(
+                //         'Forgot Password?',
+                //         style: TextStyle(color: Colors.black),
+                //       ),
+                //     ],
+                //   ),
+                // ),
 
                 const SizedBox(height: 25),
 

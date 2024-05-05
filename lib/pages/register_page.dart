@@ -65,10 +65,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 25),
 
-                // Username textfield
+                // Email textfield
                 MyTextField(
                   controller: emailController,
-                  hintText: 'Username',
+                  hintText: 'Email',
                   obscureText: false,
                 ),
 
@@ -149,7 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     GestureDetector(
                       onTap: widget.onTap,
                       child: const Text(
-                        'Sign Up',
+                        'Sign In',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
