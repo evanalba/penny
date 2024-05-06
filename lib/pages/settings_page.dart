@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:penny/pages/about_page.dart';
+import 'package:penny/pages/home_page.dart';
+import 'package:penny/pages/login_page.dart';
+import 'package:penny/pages/username_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -12,6 +15,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final TextEditingController _usernameController = TextEditingController();
+  String _displayedUsername = '';
   bool _isDarkMode = false;
 
   @override
@@ -26,8 +30,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final isDarkMode =
         prefs.getBool('isDarkMode') ?? false; // Default to light mode
     setState(() {
-      _usernameController.text =
-          username ?? ''; // Set username from prefs or empty string
+      _displayedUsername = username ?? ''; // Set initial displayed username
+      _usernameController.text = username ?? ''; // Set username controller text
       _isDarkMode = isDarkMode;
     });
   }
@@ -35,26 +39,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _saveSettings() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('username', _usernameController.text);
-    await prefs.setBool('isDarkMode', _isDarkMode);
+    setState(() {
+      _displayedUsername =
+          _usernameController.text; // Update displayed username
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text(
+          'Settings',
+          style: TextStyle(color: Colors.black), // Text color set to black
+        ),
       ),
       body: ListView(
         children: [
           ListTile(
-            title: const Text('Username'),
-            subtitle: TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(
-                border: InputBorder.none, // Remove default border
-              ),
+            title: const Text(
+              'Username',
+              style: TextStyle(color: Colors.black), // Text color set to black
             ),
-            trailing: const Icon(Icons.arrow_forward_ios),
+            subtitle: Text(_displayedUsername), // Display saved username
+            trailing: const Icon(Icons.edit),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const UsernamePage()),
+            ),
           ),
           SwitchListTile(
             title: const Text('Dark Mode'),
@@ -62,7 +74,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onChanged: (value) => setState(() => _isDarkMode = value),
           ),
           ListTile(
-            title: const Text('About'),
+            title: const Text(
+              'About',
+              style: TextStyle(color: Colors.black), // Text color set to black
+            ),
             trailing: const Icon(Icons.info_outline),
             onTap: () => Navigator.push(
               context,
@@ -70,7 +85,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           ListTile(
-            title: const Text('Log Out'),
+            title: const Text(
+              'Log Out',
+              style: TextStyle(color: Colors.black),
+            ),
             trailing: const Icon(Icons.logout),
             onTap: () => FirebaseAuth.instance.signOut(),
           ),
