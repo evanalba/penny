@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'machine_details_page.dart'; // Import MachineDetailsPage
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -10,9 +11,11 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  CollectionReference collectionReference = FirebaseFirestore.instance.collection('machines');
-
+  CollectionReference collectionReference =
+      FirebaseFirestore.instance.collection('machines');
+  List<Map<String, dynamic>>? allMachines;
   List<Map<String, dynamic>>? machines;
+  String searchText = '';
 
   @override
   void initState() {
@@ -24,9 +27,11 @@ class _SearchScreenState extends State<SearchScreen> {
     try {
       final snapshot = await collectionReference.get();
       setState(() {
-        machines = snapshot.docs
+        allMachines = snapshot.docs
             .map((doc) => doc.data() as Map<String, dynamic>)
-            .toList();
+            .toList()
+          ..sort((a, b) => a['name'].compareTo(b['name']));
+        machines = allMachines;
       });
     } catch (error) {
       if (kDebugMode) {
@@ -35,27 +40,75 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
+  void _onSearchTextChanged(String text) {
+    setState(() {
+      searchText = text;
+      if (text.isEmpty) {
+        machines = allMachines;
+      } else {
+        machines = allMachines
+            ?.where((machine) =>
+                machine['name'].toLowerCase().contains(text.toLowerCase()))
+            .toList();
+      }
+    });
+  }
+
+  // Navigate to details page on ListTile tap
+  void _navigateToDetailsPage(Map<String, dynamic> machine) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MachineDetailsPage(machine: machine),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search'),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: const InputDecoration(
+                  hintText: 'Search Machines...',
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                ),
+                onChanged: _onSearchTextChanged,
+              ),
+            ),
+            Expanded(
+              child: machines != null
+                  ? (machines!.isEmpty)
+                      ? const Center(child: Text('No machines found.'))
+                      : ListView.builder(
+                          itemCount: machines!.length,
+                          itemBuilder: (context, index) {
+                            final machine = machines![index];
+                            return ListTile(
+                              title: Text(machine['name']),
+                              subtitle: Text(machine['address']),
+                              // Wrap ListTile with GestureDetector for tap handling
+                              onTap: () => _navigateToDetailsPage(machine),
+                            );
+                          },
+                        )
+                  : const Center(child: CircularProgressIndicator()),
+            ),
+          ],
+        ),
       ),
-      body: machines != null
-          ? (machines!.isEmpty)
-              ? const Center(child: Text('No machines found.')) // Handle empty data (optional)
-              : ListView.builder(
-                  itemCount: machines!.length,
-                  itemBuilder: (context, index) {
-                    final machine = machines![index];
-                    return ListTile(
-                      title: Text(machine['name']), // Replace 'name' with your property name
-                      subtitle: Text(machine['description']), // Replace 'description' with your property name
-                      // Add leading/trailing icons or other elements based on your machine data
-                    );
-                  },
-                )
-          : const Center(child: CircularProgressIndicator()), // Show loading indicator
     );
   }
 }
