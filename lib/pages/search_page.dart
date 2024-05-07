@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'machine_details_page.dart'; // Import MachineDetailsPage
+import 'machine_details_page.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -54,7 +54,6 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  // Navigate to details page on ListTile tap
   void _navigateToDetailsPage(Map<String, dynamic> machine) {
     Navigator.push(
       context,
@@ -98,8 +97,16 @@ class _SearchScreenState extends State<SearchScreen> {
                             final machine = machines![index];
                             return ListTile(
                               title: Text(machine['name']),
-                              subtitle: Text(machine['address']),
-                              // Wrap ListTile with GestureDetector for tap handling
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(machine['address']),
+                                  Text(
+                                    'Status: ${machine['status']}',
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
                               onTap: () => _navigateToDetailsPage(machine),
                             );
                           },
