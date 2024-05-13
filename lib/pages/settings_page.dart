@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:penny/pages/about_page.dart';
-import 'package:penny/pages/home_page.dart';
-import 'package:penny/pages/login_page.dart';
 import 'package:penny/pages/username_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,15 +31,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _displayedUsername = username ?? ''; // Set initial displayed username
       _usernameController.text = username ?? ''; // Set username controller text
       _isDarkMode = isDarkMode;
-    });
-  }
-
-  Future<void> _saveSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('username', _usernameController.text);
-    setState(() {
-      _displayedUsername =
-          _usernameController.text; // Update displayed username
     });
   }
 

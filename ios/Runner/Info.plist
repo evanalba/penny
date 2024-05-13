@@ -28,6 +28,12 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to the photo library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs access to the camera.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs access to the microphone.</string>
 	<key>CFBundleName</key>
 	<string>penny</string>
 	<key>CFBundlePackageType</key>
