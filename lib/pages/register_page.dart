@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:penny/components/my_button.dart';
@@ -18,26 +19,29 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  // Sign user in method
   void signUserUp() async {
-    // Try creating the user.
     try {
-      // Check if password is confirmed
       if (passwordController.text != confirmPasswordController.text) {
-        // Show error message using ScaffoldMessenger
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Passwords do not match!'),
           ),
         );
-        return; // Exit the function to prevent user creation with mismatched passwords
+        return;
       }
-
-      // If passwords match, proceed with user creation
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
+
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCredential.user!.email)
+          .set({
+        'username': emailController.text.split('@')[0],
+        'machines_collected': 0,
+      });
     } on FirebaseAuthException catch (e) {
       SnackBar(
         content: Text('Sign up failed: ${e.message}'),
@@ -54,7 +58,6 @@ class _RegisterPageState extends State<RegisterPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // Logo
                 const Text(
                   'Penny',
                   style: TextStyle(
@@ -65,7 +68,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 25),
 
-                // Email textfield
                 MyTextField(
                   controller: emailController,
                   hintText: 'Email',
@@ -74,7 +76,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 10),
 
-                // Password textfield
                 MyTextField(
                   controller: passwordController,
                   hintText: 'Password',
@@ -82,7 +83,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 10),
 
-                // Confirm Password textfield
                 MyTextField(
                   controller: confirmPasswordController,
                   hintText: 'Confirm Password',
@@ -90,7 +90,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 10),
 
-                // Sign Up button
                 MyButton(
                   text: "Sign Up",
                   onTap: signUserUp,
@@ -98,7 +97,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 50),
 
-                // or continue with
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
@@ -128,11 +126,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 25),
 
-                // Google sign in button
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SquareTile(onTap: () => AuthService().signInWithGoogle(), imagePath: 'lib/images/google.png'),
+                    SquareTile(
+                        onTap: () => AuthService().signInWithGoogle(),
+                        imagePath: 'lib/images/google.png'),
                   ],
                 ),
 

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:penny/pages/settings_page.dart';
 
@@ -20,29 +21,27 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             // Profile picture section
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 50.0,
-                    // backgroundImage: const NetworkImage(
-                    //   'https://placeimg.com/640/480/people', // Replace with user's profile picture URL
-                    // ),
                   ),
-                  SizedBox(width: 16.0),
+                  const SizedBox(width: 16.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Username',
-                        style: TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold),
-                      ),
+                      if (FirebaseAuth.instance.currentUser != null)
+                        Text(
+                          FirebaseAuth.instance.currentUser!.email!,
+                          style: const TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.bold),
+                        ),
                     ],
                   ),
                 ],

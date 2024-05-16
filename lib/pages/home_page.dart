@@ -1,6 +1,5 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:penny/pages/camera_page.dart';
 import 'package:penny/pages/collection_page.dart';
 import 'package:penny/pages/leaderboard_page.dart';
 import 'package:penny/pages/profile_page.dart';
@@ -19,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     const SearchScreen(),
     const CollectionScreen(),
-    const CameraScreen(),
+    // const CameraScreen(),
     const LeaderboardScreen(),
     const ProfileScreen(),
   ];
@@ -33,14 +32,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   actions: [
-      //     IconButton(
-      //       onPressed: () => FirebaseAuth.instance.signOut(),
-      //       icon: const Icon(Icons.logout, color: Colors.black),
-      //     ),
-      //   ],
-      // ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.black, 
@@ -56,10 +47,10 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.backpack),
             label: 'Collection',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.photo_camera),
-            label: 'Camera',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.photo_camera),
+          //   label: 'Camera',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.leaderboard),
             label: 'Leaderboard',

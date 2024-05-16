@@ -103,7 +103,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   Text(machine['address']),
                                   Text(
                                     'Status: ${machine['status']}',
-                                    style: const TextStyle(color: Colors.grey),
+                                    style: const TextStyle(color: Colors.black),
                                   ),
                                 ],
                               ),

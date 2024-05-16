@@ -26,10 +26,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final prefs = await SharedPreferences.getInstance();
     final username = prefs.getString('username');
     final isDarkMode =
-        prefs.getBool('isDarkMode') ?? false; // Default to light mode
+        prefs.getBool('isDarkMode') ?? false;
     setState(() {
-      _displayedUsername = username ?? ''; // Set initial displayed username
-      _usernameController.text = username ?? ''; // Set username controller text
+      _displayedUsername = username ?? '';
+      _usernameController.text = username ?? '';
       _isDarkMode = isDarkMode;
     });
   }
@@ -40,17 +40,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: const Text(
           'Settings',
-          style: TextStyle(color: Colors.black), // Text color set to black
+          style: TextStyle(color: Colors.black),
         ),
+        actions: [
+          IconButton(
+            onPressed: () => FirebaseAuth.instance.signOut(),
+            icon: const Icon(Icons.logout, color: Colors.black),
+          ),
+        ],
       ),
       body: ListView(
         children: [
           ListTile(
             title: const Text(
               'Username',
-              style: TextStyle(color: Colors.black), // Text color set to black
+              style: TextStyle(color: Colors.black),
             ),
-            subtitle: Text(_displayedUsername), // Display saved username
+            subtitle: Text(_displayedUsername),
             trailing: const Icon(Icons.edit),
             onTap: () => Navigator.push(
               context,
@@ -65,21 +71,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             title: const Text(
               'About',
-              style: TextStyle(color: Colors.black), // Text color set to black
+              style: TextStyle(color: Colors.black),
             ),
             trailing: const Icon(Icons.info_outline),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const AboutPage()),
             ),
-          ),
-          ListTile(
-            title: const Text(
-              'Log Out',
-              style: TextStyle(color: Colors.black),
-            ),
-            trailing: const Icon(Icons.logout),
-            onTap: () => FirebaseAuth.instance.signOut(),
           ),
         ],
       ),
