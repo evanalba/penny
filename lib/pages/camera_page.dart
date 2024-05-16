@@ -1,11 +1,17 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CameraScreen extends StatefulWidget {
   final Map<String, dynamic> machine;
 
-  const CameraScreen({super.key, required this.machine});
+  const CameraScreen({
+    super.key,
+    required this.machine,
+  });
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -14,6 +20,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   final ImagePicker _picker = ImagePicker();
   File? _pickedImage;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _getImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(source: source);
@@ -22,6 +29,39 @@ class _CameraScreenState extends State<CameraScreen> {
         _pickedImage = File(image.path);
       });
     }
+  }
+
+  Future<void> _removeMachine() async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final userEmail = await _getUserEmail();
+
+    final query = firestore
+        .collection('collected')
+        .where(
+          'machine_id',
+          isEqualTo: widget.machine['machine_id'],
+        )
+        .where(
+          'user_email',
+          isEqualTo: userEmail,
+        );
+
+    final querySnapshot = await query.get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final docRef = querySnapshot.docs[0].reference;
+      await docRef.delete();
+      Navigator.pop(context);
+    } else {
+      if (kDebugMode) {
+        print("No document found for deletion");
+      }
+    }
+  }
+
+  Future<String?> _getUserEmail() async {
+    final user = _auth.currentUser;
+    return user?.email;
   }
 
   @override
@@ -69,6 +109,10 @@ class _CameraScreenState extends State<CameraScreen> {
                         ),
                       ),
                     ),
+              ElevatedButton(
+                onPressed: _removeMachine,
+                child: const Text("Remove"),
+              ),
             ],
           ),
         ),
